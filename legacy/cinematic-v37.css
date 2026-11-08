@@ -1,0 +1,29 @@
+/* v37 — home rebuilt as a distinct cinematic composition, not incremental recoloring */
+#app[data-screen="home"]{--lime:#b9ff16;--amber:#ff9e25}
+#app[data-screen="home"] .topbar{margin-bottom:10px}
+#app[data-screen="home"] .hero-panel{position:relative;height:415px;min-height:0;margin:8px 0 10px;padding:0;isolation:isolate;border-radius:18px;overflow:hidden;border:1px solid #fb9d30;box-shadow:0 0 0 1px #ff9d1a18,0 0 36px #fa831c25;background:#020605}
+#app[data-screen="home"] .hero-panel::before{content:"";position:absolute;inset:0;z-index:1;width:auto;height:auto;border-radius:0;background:linear-gradient(0deg,#020605 5%,#0206058a 23%,transparent 56%),linear-gradient(90deg,#020605a8 0%,transparent 72%);opacity:1;box-shadow:none}
+#app[data-screen="home"] .hero-panel::after{content:"";position:absolute;inset:auto 0 82px;height:1px;background:linear-gradient(90deg,transparent,#f6a338b0,transparent);border:0;box-shadow:none;z-index:2}
+#app[data-screen="home"] .hero-scene{position:absolute;inset:0 0 81px;overflow:hidden;background:radial-gradient(ellipse at 80% 28%,#ff872e4a,transparent 51%),radial-gradient(ellipse at 15% 74%,#f67b172d,transparent 58%),#050807}
+#app[data-screen="home"] .hero-scene-rome{position:absolute;inset:20% 29% 0 -12%;background:url('cinematic-rome.svg') center bottom/contain no-repeat;opacity:.68;filter:sepia(1) saturate(2) drop-shadow(0 0 14px #f38333)}
+#app[data-screen="home"] .hero-scene-athlete{position:absolute;inset:-2% -8% -5% 29%;background:url('cinematic-athlete.png') center top/contain no-repeat;filter:drop-shadow(-10px 8px 22px #e9702788);mask-image:linear-gradient(#000 65%,transparent 99%)}
+#app[data-screen="home"] .hero-brand{position:absolute;left:17px;top:25px;z-index:3;display:grid;gap:1px;transform:skew(-9deg);text-shadow:0 0 15px #baff3588}
+#app[data-screen="home"] .hero-brand span{font-size:47px;line-height:.8;font-weight:1000;letter-spacing:-8px;font-style:italic;color:#baff16}
+#app[data-screen="home"] .hero-brand small{font-size:9px;letter-spacing:4px;color:#fff;font-weight:900;margin-left:4px}
+#app[data-screen="home"] .hero-panel .eyebrow{position:absolute;left:17px;top:101px;z-index:3;color:#ffb34b;font-size:9px;letter-spacing:1.25px;max-width:90%}
+#app[data-screen="home"] .hero-panel h1{position:absolute;left:17px;bottom:143px;z-index:4;max-width:75%;margin:0;font-size:clamp(28px,8vw,39px);letter-spacing:-1.4px;text-shadow:0 3px 16px #000,0 0 10px #000}
+#app[data-screen="home"] .hero-panel p:not(.eyebrow){position:absolute;left:18px;bottom:105px;z-index:4;max-width:64%;margin:0;font-size:11px;line-height:1.45;color:#f2f6ef;text-shadow:0 2px 9px #000}
+#app[data-screen="home"] .hero-progress{position:absolute;right:15px;bottom:98px;width:83px;height:83px;z-index:5;border:0;border-radius:50%;background:radial-gradient(circle at center,#030908 58%,transparent 60%),conic-gradient(#c0ff18 var(--hero-pct),#344130 0);box-shadow:0 0 0 4px #030a08,0 0 0 5px #ffad3380,0 0 22px #b9ff1644;display:flex;flex-direction:column;justify-content:center;align-items:center}
+#app[data-screen="home"] .hero-progress strong{font-size:23px;color:#fff}#app[data-screen="home"] .hero-progress small{font-size:9px;color:#d8f1c6}
+#app[data-screen="home"] .stat-strip{position:absolute;bottom:10px;left:10px;right:10px;z-index:4;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+#app[data-screen="home"] .stat-strip>div{min-height:64px;padding:10px 3px 6px;border-radius:11px;border:1px solid #c187386b;background:linear-gradient(155deg,#10201a,#040a08);box-shadow:inset 0 1px #ffffff15;text-align:center}
+#app[data-screen="home"] .stat-strip b{font-size:21px;color:#baff16}#app[data-screen="home"] .stat-strip small{font-size:9px;color:#d1ddd0}
+#app[data-screen="home"]>.card.feature{margin:10px 0 12px;padding:16px 15px;border:1px solid #ffa32d;border-radius:16px;background:radial-gradient(ellipse at 100% 0%,#ff8e2429,transparent 65%),linear-gradient(145deg,#16231a,#070d0a);box-shadow:0 0 23px #ff951d25}
+#app[data-screen="home"]>.card.feature:before{background:#ffad30;left:16px;width:80px}
+#app[data-screen="home"]>.card.feature .eyebrow{color:#ffad32;font-size:10px}
+#app[data-screen="home"]>.card.feature h2{font-size:22px;margin:7px 0}
+#app[data-screen="home"]>.card.feature p:not(.eyebrow){font-size:11px;line-height:1.5;margin:6px 0 12px}
+#app[data-screen="home"]>.card.feature .btn{min-height:47px;padding:11px;font-weight:850;border-radius:13px;box-shadow:0 0 19px #baff164e,inset 0 1px #fff8}
+#app[data-screen="home"] .cinematic-summary{margin-top:12px}
+#app[data-screen="home"] .coach-teaser{border:1px solid #ffab376e;background:linear-gradient(110deg,#171e16,#060d0b);box-shadow:0 0 20px #ff951a12}
+@media(max-width:370px){#app[data-screen="home"] .hero-panel{height:390px}#app[data-screen="home"] .hero-scene-athlete{right:-15%}#app[data-screen="home"] .hero-panel h1{font-size:29px}#app[data-screen="home"] .hero-progress{width:72px;height:72px}#app[data-screen="home"] .stat-strip small{font-size:8px}}

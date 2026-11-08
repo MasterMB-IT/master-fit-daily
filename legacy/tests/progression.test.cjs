@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const context={localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(context);vm.runInContext(src.slice(0,src.indexOf('function header()'))+'\nthis.target=exerciseTarget;',context);
+const e={catalogId:'squat-basic'},week={start:'2026-11-09',reps:8};
+const session=(actual,effort='easy',pain='no',completed=true)=>[{date:'2026-11-05',completed,feedback:{effort,pain},exercises:[{catalogId:'squat-basic',actual}]}];
+assert.equal(context.target(e,week,[]).reps,8);
+assert.equal(context.target(e,week,session([8,8])).reps,9);
+assert.equal(context.target(e,week,session([8,8],'ok')).reps,8);
+assert.equal(context.target(e,week,session([6,7])).reps,6);
+assert.equal(context.target(e,week,session([8,8],'easy','yes')).reps,8);
+assert.equal(context.target(e,week,session([8,8],'easy','no',false)).reps,8);
+console.log('PASS: obiettivi individuali, progressione, fatica, dolore, sessioni parziali');

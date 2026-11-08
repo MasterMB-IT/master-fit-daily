@@ -1,0 +1,18 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const catalog=JSON.parse(fs.readFileSync(__dirname+'/../exercise-catalog.json','utf8')).exercises;
+const ctx={window:{MASTER_FIT_CATALOG:catalog},localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(ctx);vm.runInContext(src.slice(0,src.indexOf('function alternativeCandidates('))+'\nthis.api={movementReview,movementReviews};',ctx);
+const profile={level:'attivo',equipment:['dumbbells','bands','barbell','machines'],goal:'forza'};
+const pair=catalog.find(x=>catalog.some(y=>y.pattern===x.pattern&&y.equipment===x.equipment&&y.level>x.level));
+assert.ok(pair,'catalog must contain an eligible progression pair');
+const session=(id,effort='ok',pain='no',reps=10)=>({id,completed:true,feedback:{effort,pain},exercises:[{key:pair.pattern,catalogId:pair.id,target:{reps:8},actual:[reps,reps]}]});
+const two=[session('s1'),session('s2')];
+const proposal=ctx.api.movementReview(pair.pattern,profile,two,{});
+assert.ok(proposal);assert.equal(proposal.direction,'progress');assert.ok(proposal.choice.level>pair.level);
+assert.equal(ctx.api.movementReview(pair.pattern,profile,two,{[proposal.token]:'declined'}),null);
+assert.equal(ctx.api.movementReview(pair.pattern,profile,[session('s1','ok','yes'),session('s2')],{}),null);
+assert.equal(ctx.api.movementReview(pair.pattern,profile,[session('s1')],{}),null);
+assert.equal(ctx.api.movementReview(pair.pattern,profile,[session('s1','hard'),session('s2','hard')],{})?.direction==='progress',false);
+assert.equal(ctx.api.movementReview(pair.pattern,{...profile,level:'ripresa'},two,{})?.direction==='progress',false);
+console.log('PASS: proposta prudente, consenso persistito, esclusione dolore, dati insufficienti e limiti di livello');

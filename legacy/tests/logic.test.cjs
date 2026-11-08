@@ -1,0 +1,25 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const prefix=src.slice(0,src.indexOf('function header()'));
+const context={localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(context);
+vm.runInContext(prefix+'\nthis.api={weekPlan,variants,monday,plusDays};',context);
+const {weekPlan,variants,monday,plusDays}=context.api;
+const profile={days:2,duration:60,equipment:[]};
+const start='2026-11-02';
+const w=weekPlan(profile,start,null);
+assert.equal(w.sessions.length,2);assert.equal(w.sets,2);assert.equal(w.reps,8);
+assert.equal(w.sessions[0].date,'2026-11-03');
+assert.equal(variants('push',profile).length,2);
+assert.equal(variants('pull',profile).length,0);
+const completed=[{...w.sessions[0],status:'done',completed:true,feedback:{effort:'easy',pain:'no'}},{...w.sessions[1],status:'done',completed:true,feedback:{effort:'easy',pain:'no'}}];
+assert.equal(weekPlan(profile,plusDays(start,7),{...w,sessions:completed}).reps,9);
+const painful=[{...completed[0],feedback:{effort:'ok',pain:'yes'}},completed[1]];
+assert.equal(weekPlan(profile,plusDays(start,7),{...w,sessions:painful}).reps,8);
+const partial=[{...completed[0],status:'partial',completed:true},completed[1]];
+assert.equal(weekPlan(profile,plusDays(start,7),{...w,sessions:partial}).reps,8);
+assert.equal(monday('2026-11-05'),'2026-11-02');
+console.log('PASS: verifiche su piano, date, attrezzatura, feedback e sessioni parziali');
+
+assert.equal(weekPlan(profile,plusDays(start,7),{...w,sessions:painful}).approved,false);
+assert.equal(weekPlan(profile,plusDays(start,7),{...w,sessions:painful}).reason.includes('non aumento'),true);

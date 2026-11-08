@@ -1,0 +1,17 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const ctx={window:{MASTER_FIT_CATALOG:[]},localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(ctx);
+vm.runInContext(src.slice(0,src.indexOf('function header()'))+'\nthis.api={compareExercisePerformance,performanceComparisons};',ctx);
+const {compareExercisePerformance:cmp,performanceComparisons:history}=ctx.api;
+const e=(reps,loads)=>({catalogId:'squat',name:'Squat',actual:reps,actualLoads:loads});
+assert.equal(cmp(e([8,8],[10,10]),e([9,9],[10,10])).kind,'reps-up');
+assert.equal(cmp(e([8,8],[10,10]),e([8,8],[12,12])).kind,'load-up');
+assert.equal(cmp(e([8,8],[10,10]),e([6,6],[12,12])).kind,'tradeoff');
+assert.equal(cmp(e([8,8],[10,10]),e([8,8],[10,12])).kind,'incomparable');
+assert.equal(cmp(e([8,8],[10,10]),e([8],[10])).kind,'different-volume');
+assert.equal(cmp(e([8,8],[]),e([9,9],[])).kind,'reps-up');
+const sessions=[{date:'2026-11-01',completed:true,feedback:{pain:'no'},exercises:[e([8,8],[10,10])]},{date:'2026-11-03',completed:false,feedback:{pain:'no'},exercises:[e([20,20],[20,20])]},{date:'2026-11-05',completed:true,feedback:{pain:'no'},exercises:[e([8,8],[12,12])]}];
+assert.equal(history(sessions).length,1);
+assert.equal(history(sessions)[0].kind,'load-up');
+console.log('PASS: confronti prestazioni e esclusione sessioni parziali');

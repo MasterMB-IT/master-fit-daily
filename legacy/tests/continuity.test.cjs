@@ -1,0 +1,18 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const ctx={localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};vm.createContext(ctx);
+vm.runInContext(src.slice(0,src.indexOf('function header()'))+'\nthis.api={weekPlan,continuityAssessment,continuityCard};',ctx);
+const {weekPlan,continuityAssessment,continuityCard}=ctx.api;
+const profile={days:2,duration:60,equipment:[],goal:'forza'};
+const prior=weekPlan(profile,'2026-10-05',null);
+const paused=weekPlan(profile,'2026-11-02',prior,[]);
+assert.equal(paused.continuity.kind,'pause');assert.equal(paused.sets,1);assert.ok(paused.reps<=prior.reps);assert.equal(paused.approved,false);
+assert.match(continuityCard(paused),/Bentornato/);
+const missed=weekPlan(profile,'2026-10-12',{...prior,approved:true},[]);
+assert.equal(missed.continuity.kind,'missed');assert.equal(missed.sets,1);
+const moved={...prior,sessions:prior.sessions.map(s=>({...s,completed:true,status:'done',feedback:{pain:'no',effort:'easy'}}))};
+const regular=weekPlan(profile,'2026-10-12',moved,[{date:'2026-10-09',completed:true}]);
+assert.equal(regular.continuity.kind,'regular');assert.equal(regular.sets,2);
+const partial={...prior,sessions:[{...prior.sessions[0],completed:true,status:'done'},prior.sessions[1]]};
+assert.equal(continuityAssessment(partial,'2026-10-12',[{date:'2026-10-08',completed:true}]).kind,'partial');
+console.log('PASS: pausa prolungata, settimana saltata, parziale, continuità e consenso');

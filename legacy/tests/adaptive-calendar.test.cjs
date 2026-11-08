@@ -1,0 +1,16 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const src=fs.readFileSync(require('path').join(__dirname,'../app.js'),'utf8');
+const ctx={localStorage:{getItem:()=>null},window:{MASTER_FIT_CATALOG:[]},document:{querySelector:()=>({innerHTML:''}),querySelectorAll:()=>[]},navigator:{},location:{protocol:'file:'},alert:()=>{}};
+vm.createContext(ctx);vm.runInContext(src.replace(/render\(\);if\('serviceWorker'[\s\S]*$/,''),ctx);
+const p={days:3,duration:45,level:'ripresa',equipment:[],trainingDays:[0,2,4],unavailableDays:[0],shiftMode:'alternate',shiftAnchor:'2026-11-02'};
+const a=ctx.adaptiveOffsets(p,'2026-11-02'),b=ctx.adaptiveOffsets(p,'2026-11-09');
+assert(a.offsets.length===3&&a.offsets.every(x=>x!==0));
+assert(a.reason.includes('turno mattina')&&b.reason.includes('turno pomeriggio'));
+assert(a.offsets.every((x,i)=>i===0||x>a.offsets[i-1]));
+const w=ctx.weekPlan(p,'2026-11-02',null);
+assert(w.scheduleReason.includes('turno mattina'));
+assert(w.sessions.every(s=>s.date!=='2026-11-02'));
+assert.deepStrictEqual(Array.from(ctx.adaptiveOffsets({days:2},'2026-11-02').offsets),[1,3]);
+const limited=ctx.adaptiveOffsets({...p,unavailableDays:[0,1,2,3,4,5]},'2026-11-02');
+assert(limited.reason.includes('insufficiente'));
+console.log('PASS: turni alternati, giorni esclusi, spiegazioni, retrocompatibilità, disponibilità insufficiente');

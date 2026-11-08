@@ -1,0 +1,32 @@
+/* EVOLVE v32 — mobile visual hierarchy and accessible iconography. */
+:root{--mf-amber:#ff9e29;--mf-lime:#bdff1c}
+main{overflow-x:clip}
+.hero-panel{min-height:360px;padding-bottom:94px;background:radial-gradient(ellipse at 76% 20%,#ec7d2a24,transparent 55%),linear-gradient(170deg,#07110d,#020606 85%)}
+.hero-panel::before{bottom:77px;height:105px;opacity:.62}
+.hero-panel .eyebrow{position:relative;z-index:4;text-shadow:0 2px 8px #000}
+.hero-art{height:79%;width:83%;right:-8px;top:-4px;filter:drop-shadow(0 0 18px #ff922744)}
+.hero-panel h1{margin-top:127px;font-size:clamp(29px,8vw,37px);max-width:75%;line-height:1.06}
+.hero-panel p:not(.eyebrow){max-width:63%;margin-bottom:5px}
+.hero-progress{bottom:100px;right:13px;width:76px;height:76px}
+.hero-progress strong{font-size:23px}
+.stat-strip{bottom:9px;gap:6px}
+.stat-strip>div{min-height:62px;padding:9px 3px}
+.stat-strip b{font-size:20px}
+.card.feature{padding:15px 15px 17px;margin-top:11px}
+.card.feature h2{margin:7px 0;font-size:22px}
+.card.feature p{margin:7px 0;font-size:12px}
+.card.feature .btn{margin-top:11px}
+.bottom-nav{padding:7px 5px max(10px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.bottom-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:52px}
+.bottom-nav .nav-icon{display:flex;align-items:center;justify-content:center;width:26px;height:26px}
+.bottom-nav .nav-icon svg{display:block;filter:drop-shadow(0 0 5px #baff1215)}
+.bottom-nav button.selected .nav-icon svg{filter:drop-shadow(0 0 7px #baff1277)}
+.bottom-nav button small{margin:0;font-size:10px;line-height:1.2}
+.coach-hero{min-height:455px}
+.coach-helmet{height:240px;max-width:275px}
+.coach-hero h1{font-size:24px}
+.exercise-stage{min-height:315px;padding:16px}
+.exercise-stage .stage-art{height:175px}
+@media(max-width:370px){.hero-panel{min-height:345px}.hero-panel h1{margin-top:120px}.hero-progress{width:67px;height:67px;bottom:99px}.hero-progress strong{font-size:20px}.hero-art{width:90%}.bottom-nav button small{font-size:9px}}
+@media(min-width:430px){.hero-panel{min-height:395px}.hero-panel h1{margin-top:155px}.hero-art{width:77%}}
+@media(prefers-reduced-motion:reduce){.bottom-nav .nav-icon svg{filter:none}}

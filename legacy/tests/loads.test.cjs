@@ -1,0 +1,17 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const ctx={window:{MASTER_FIT_CATALOG:[]},localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(ctx);
+vm.runInContext(src.slice(0,src.indexOf('function header()'))+'\nthis.api={normalizeLoad,loadSummary,loadAdvice,exerciseTarget};',ctx);
+const {normalizeLoad,loadSummary,loadAdvice,exerciseTarget}=ctx.api;
+assert.equal(normalizeLoad('12,5'),12.5);assert.equal(normalizeLoad(''),null);
+assert(Number.isNaN(normalizeLoad('5.3')));assert(Number.isNaN(normalizeLoad('-1')));
+assert.equal(loadSummary({actualLoads:[10,10]}),'10 kg registrati');
+assert.match(loadAdvice({catalogId:'squat'},[]),/Nessun carico/);
+const e={catalogId:'squat',variant:'squat'};
+const w={start:'2026-11-09',reps:8,phase:'sviluppo'};
+const session=(loads)=>[{date:'2026-11-02',completed:true,feedback:{pain:'no',effort:'easy'},exercises:[{catalogId:'squat',actual:[8,8],actualLoads:loads}]}];
+assert.equal(exerciseTarget(e,w,session([10,10])).reps,9);
+assert.equal(exerciseTarget(e,w,session([10,12])).reps,8);
+assert.equal(exerciseTarget(e,w,session([10])).reps,8);
+console.log('PASS: carichi, validazione, progressione con carichi uniformi');

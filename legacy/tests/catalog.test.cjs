@@ -1,0 +1,23 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');const vm=require('node:vm');
+const path=require('node:path');const root=path.join(__dirname,'..');
+const data=JSON.parse(fs.readFileSync(path.join(root,'exercise-catalog.json'),'utf8'));
+const list=data.exercises;
+assert.ok(list.length>=250);
+assert.equal(new Set(list.map(x=>x.id)).size,list.length);
+assert.equal(new Set(list.map(x=>x.name.toLowerCase())).size,list.length,'Nomi duplicati');
+assert.ok(new Set(list.map(x=>x.pattern)).size>=12);
+for(const x of list){assert.ok(x.name&&x.cue&&x.advice);assert.ok(x.level>=1&&x.level<=4);assert.ok(['body','bands','dumbbells','barbell','machines','pullup'].includes(x.equipment));}
+const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+const catalogJs=fs.readFileSync(path.join(root,'exercise-catalog.js'),'utf8');
+const context={window:{},localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(context);vm.runInContext(catalogJs,context);
+vm.runInContext(app.slice(0,app.indexOf('function header()'))+'\nthis.api={catalogAvailable,chooseCatalog};',context);
+const p={level:'ripresa',equipment:[]};
+const available=context.api.catalogAvailable(p);
+assert.ok(available.length>20);
+assert.ok(available.every(x=>x.level===1&&x.equipment==='body'));
+assert.ok(context.api.chooseCatalog('squat',p));
+assert.equal(context.api.chooseCatalog('vertical_pull',p),null);
+assert.ok(context.api.catalogAvailable({level:'attivo',equipment:['dumbbells','bands']},'pull').length>available.filter(x=>x.pattern==='pull').length);
+console.log(`PASS: ${list.length} esercizi, unicità, tassonomia, livelli e attrezzatura`);

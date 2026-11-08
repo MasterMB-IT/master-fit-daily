@@ -1,0 +1,14 @@
+MASTER-Fit DAILY - Pubblicazione GitHub Pages
+
+1. Accedi a https://github.com e crea un account, se non ne hai uno.
+2. Crea un repository PUBBLICO, ad esempio master-fit-daily.
+3. Carica TUTTI i file e le cartelle contenuti in questa cartella, alla RADICE del repository (non la cartella contenitore).
+4. Apri Settings > Pages > Build and deployment > Source: Deploy from a branch.
+5. Scegli Branch: main, Folder: /(root), quindi Save.
+6. Attendi che GitHub mostri il link HTTPS: https://TUO-USERNAME.github.io/master-fit-daily/
+7. Aprilo su iPhone con Safari, Condividi > Aggiungi alla schermata Home > Apri come app > Aggiungi.
+
+ATTENZIONE: il repository e il codice sono PUBBLICI. Non caricare backup JSON, dati personali o altri file privati.
+I dati degli allenamenti rimangono nel browser/dispositivo; non sono sincronizzati con il PC. Esporta backup regolarmente.
+Questa è una confezione installabile della v48, NON una correzione dei problemi rilevati nell'audit.
+La modalità offline non è garantita: non è stato aggiunto un service worker per evitare problemi di cache osservati in Edge.

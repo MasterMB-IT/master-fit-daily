@@ -1,0 +1,16 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const catalog=JSON.parse(fs.readFileSync(__dirname+'/../exercise-catalog.json','utf8')).exercises;
+const ctx={window:{MASTER_FIT_CATALOG:catalog},localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(ctx);
+vm.runInContext(src.slice(0,src.indexOf('function header()'))+'\nthis.api={movementPrescription,selectMovement,catalogAvailable};',ctx);
+const p={level:'ripresa',equipment:[],goal:'forza'};
+const w={sets:2,reps:6};
+const a=ctx.api.movementPrescription('squat',p,w);
+assert.equal(a.restSeconds,150);assert.equal(a.reps,7);assert.equal(a.sets,2);
+assert.equal(ctx.api.movementPrescription('core',p,w).restSeconds,60);
+assert.equal(ctx.api.movementPrescription('squat',{...p,goal:'composizione'},w).restSeconds,90);
+const chosen=ctx.api.selectMovement('squat',p,'forza');assert(chosen);assert.equal(chosen.level,1);assert.equal(chosen.equipment,'body');
+const active=ctx.api.selectMovement('squat',{...p,level:'attivo',equipment:['dumbbells']},'forza');assert(active.level<=3);
+assert.equal(ctx.api.selectMovement('pull',p,'forza').equipment,'body');
+console.log('PASS: recuperi per obiettivo, accessori, livello iniziale, attrezzatura, selezione esercizi');

@@ -1,0 +1,17 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const catalog=JSON.parse(fs.readFileSync(__dirname+'/../exercise-catalog.json','utf8')).exercises;
+const ctx={window:{MASTER_FIT_CATALOG:catalog},localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(ctx);
+vm.runInContext(src.slice(0,src.indexOf('function header()'))+'\nthis.api={selectMovement,capabilitySummary};',ctx);
+const profile={level:'ripresa',goal:'forza',equipment:[],capabilities:{squat:'basic',push:'supported',hinge:'comfortable',core:'basic'}};
+assert.equal(ctx.api.selectMovement('squat',profile,'forza').name,'Squat a box');
+assert.equal(ctx.api.selectMovement('push',profile,'forza').name,'Piegamenti al muro');
+assert.equal(ctx.api.selectMovement('hinge',profile,'forza').name,'Ponte glutei con pausa');
+assert.equal(ctx.api.selectMovement('core',profile,'forza').name,'Bird dog facilitato');
+assert.match(ctx.api.capabilitySummary(profile),/4 aree/);
+const legacy={level:'ripresa',goal:'forza',equipment:[]};
+assert.ok(ctx.api.selectMovement('squat',legacy,'forza'));
+const unavailable={...profile,capabilities:{squat:'invalid'}};
+assert.ok(ctx.api.selectMovement('squat',unavailable,'forza'));
+console.log('PASS: autovalutazione facoltativa, varianti compatibili, profili precedenti');

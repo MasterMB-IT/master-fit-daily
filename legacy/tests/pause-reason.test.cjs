@@ -1,0 +1,14 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const ctx={localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};vm.createContext(ctx);
+vm.runInContext(src.slice(0,src.indexOf('function header()'))+'\nthis.api={weekPlan,pauseGate,setPauseReason,continuityCard};',ctx);
+const {weekPlan,pauseGate,setPauseReason,continuityCard}=ctx.api;
+const p={days:2,duration:60,equipment:[],goal:'forza'},old=weekPlan(p,'2026-10-05',null);
+const w=weekPlan(p,'2026-11-02',old,[]);
+assert.equal(pauseGate(w).blocked,true);assert.match(continuityCard(w),/Perché hai interrotto/);
+assert.equal(setPauseReason(w,'physical'),true);assert.equal(pauseGate(w).blocked,true);
+assert.match(pauseGate(w).reason,/professionista/);
+assert.equal(setPauseReason(w,'logistics'),true);assert.equal(pauseGate(w).blocked,false);
+assert.equal(setPauseReason(w,'random'),false);
+const first=weekPlan(p,'2026-10-05',null);assert.equal(pauseGate(first).blocked,false);
+console.log('PASS: motivo della pausa, blocco problemi fisici, ripresa logistica e primo accesso');

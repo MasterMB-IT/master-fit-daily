@@ -1,0 +1,14 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const ctx={localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(ctx);vm.runInContext(src.slice(0,src.indexOf('function header()'))+'\nthis.api={weekPlan,goalPolicy,exerciseTarget};',ctx);
+const p={days:2,duration:60,level:'ripresa',equipment:[]};
+const base=Object.fromEntries(['forza','muscolo','benessere','composizione'].map(goal=>[goal,ctx.api.weekPlan({...p,goal},'2026-11-02',null)]));
+assert.equal(base.forza.reps,6);assert.equal(base.muscolo.reps,10);assert.equal(base.benessere.reps,8);assert.equal(base.composizione.reps,10);
+assert.equal(base.muscolo.sets,2);assert.equal(ctx.api.weekPlan({...p,goal:'muscolo',level:'attivo'},'2026-11-02',null).sets,3);
+assert.equal(base.forza.goalLabel,'Forza');assert(base.muscolo.reason.includes('volume sostenibile'));
+const w=base.forza;const done=w.sessions.map(s=>({...s,status:'done',completed:true,feedback:{effort:'easy',pain:'no'}}));
+const next=ctx.api.weekPlan({...p,goal:'forza'},'2026-11-09',{...w,sessions:done});assert.equal(next.reps,7);assert.equal(next.approved,false);
+const pain=ctx.api.weekPlan({...p,goal:'forza'},'2026-11-09',{...w,sessions:done.map(s=>({...s,feedback:{effort:'easy',pain:'yes'}}))});assert(pain.reps<=w.reps);
+assert.equal(ctx.api.exerciseTarget({catalogId:'x'}, {...next,reps:10},[{date:'2026-11-02',completed:true,feedback:{effort:'easy',pain:'no'},exercises:[{catalogId:'x',actual:[10,10]}]}]).reps,10);
+console.log('PASS: 4 strategie obiettivo, volume prudente, progressione, approvazione, dolore, tetti');

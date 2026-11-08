@@ -1,0 +1,35 @@
+/* EVOLVE v33 — screen-by-screen cinematic composition, 390px iPhone baseline. */
+:root{--mf-orange:#ff9225;--mf-lime:#bcff19}
+body{background:#020504}
+main{background:radial-gradient(ellipse at 95% 0,#29401d28,transparent 420px),linear-gradient(#050a08,#020504);border-inline:1px solid #d47b2926}
+.topbar{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #ffad352b}
+.brand{font-weight:950;text-shadow:0 0 12px #8aff1a1c}
+.hero-panel{min-height:347px;padding:20px 15px 84px;border:1px solid #fa8e2eaf;border-radius:23px;background:radial-gradient(ellipse at 95% 35%,#ff89201f,transparent 55%),linear-gradient(140deg,#0b1511,#020504 75%);box-shadow:inset 0 1px #ffb25c3d,0 0 24px #ff89101c}
+.hero-panel::before{height:110px;bottom:71px;opacity:.55}
+.hero-panel::after{opacity:.28;right:-80px;top:4px}
+.hero-panel .eyebrow{color:#ffbf52;letter-spacing:1.4px}
+.hero-panel h1{position:relative;z-index:3;margin-top:139px;font-size:clamp(28px,8vw,37px);max-width:72%;text-shadow:0 2px 9px #000}
+.hero-panel p:not(.eyebrow){position:relative;z-index:3;max-width:70%;line-height:1.45;text-shadow:0 2px 8px #000}
+.hero-art{position:absolute;top:-2px;right:-5px;width:76%;height:79%;background-position:right top;background-size:contain;filter:drop-shadow(0 0 20px #fa8c2855)}
+.hero-progress{right:12px;bottom:89px;width:79px;height:79px;z-index:4;border:2px solid #aaff2a;box-shadow:0 0 18px #a6ff2a50,0 0 0 5px #0009}
+.hero-progress strong{font-size:24px}
+.stat-strip{left:10px;right:10px;bottom:9px;gap:5px;z-index:5}
+.stat-strip>div{border-color:#c5813d6e;min-height:62px;background:#06100eea}
+.stat-strip b{color:#c5ff2b}
+.card.feature{border-color:#ff9e34aa;background:radial-gradient(circle at 95% 0,#f18b1c2b,transparent 60%),linear-gradient(130deg,#1d1a11,#0a120f);box-shadow:0 0 19px #f8881924,inset 0 1px #ffb6583b}
+.card.feature::before{background:#ff9e28;box-shadow:0 0 12px #ff9e28}
+.card.feature .eyebrow{color:#ffbd57}
+.btn{background:linear-gradient(180deg,#ddff67 0%,#bfff17 53%,#88d800 100%);border:1px solid #e0ff78;box-shadow:0 0 14px #b7ff2650,inset 0 1px #fff9;color:#081006;font-weight:850}
+.bottom-nav{border-color:#b8753e7d;background:#070d0beF;box-shadow:0 -8px 35px #000d,0 -2px 15px #ff8d1724}
+.bottom-nav button.selected{color:#bfff1a;background:linear-gradient(#a5ff1b22,#a5ff1b06)}
+.coach-hero{overflow:hidden;min-height:430px;border:1px solid #54f74d70;background:radial-gradient(ellipse at 70% 30%,#3efc3144,transparent 50%),#030a08;box-shadow:0 0 28px #3aff1b18}
+.coach-helmet{background-position:center top;background-size:contain;max-width:300px;height:255px;filter:drop-shadow(0 0 25px #41ff5b70)}
+.coach-message{border-color:#51ffa78c;box-shadow:0 0 15px #31ff6430;background:#061913d9}
+.coach-quick button{border-color:#628d776c;background:linear-gradient(120deg,#14241f,#050d0b);box-shadow:inset 0 1px #fff1}
+.coach-quick .quick-icon{color:#bdff22}
+.exercise-stage{border:1px solid #ff9a3177;background:radial-gradient(circle at 50% 25%,#294d3d55,transparent 55%),#070c0a;box-shadow:0 0 22px #f68d1424}
+.series-panel{border-color:#c98e387e}
+.session-row,.card,.three-stats .card{border-color:#526c576e}
+.progress div{background:linear-gradient(90deg,#72d10e,#caff35);box-shadow:0 0 10px #a5ff29a0}
+@media(max-width:370px){.hero-panel{min-height:331px}.hero-panel h1{margin-top:126px}.hero-progress{width:69px;height:69px}.hero-art{width:82%}}
+@media(min-width:430px){.hero-panel{min-height:380px}.hero-panel h1{margin-top:159px}}

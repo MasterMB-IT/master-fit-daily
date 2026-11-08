@@ -1,0 +1,34 @@
+/* EVOLVE v34: visual QA refinements on 390px mobile reference. */
+:root{--mf-glow:#baff1b;--mf-ember:#ff9828}
+/* Correct the stray check glyph visible below the brand mark. */
+.logo-mark{position:relative;letter-spacing:-3px;transform:skew(-9deg);font-size:34px;line-height:1;overflow:visible}
+.logo-mark span{display:none}
+.logo-mark::after{content:"";position:absolute;left:5px;right:3px;bottom:4px;height:3px;transform:skew(-28deg);background:linear-gradient(90deg,#baff1b,transparent);box-shadow:0 0 12px #baff1b8a}
+/* Keep the first training action high on the page, with cinematic depth. */
+.hero-panel{isolation:isolate}
+.hero-art{z-index:0;pointer-events:none}
+.hero-panel::after{z-index:1}
+.hero-panel .eyebrow,.hero-panel h1,.hero-panel p:not(.eyebrow){z-index:3}
+.hero-panel h1{max-width:74%;line-height:1.02}
+.hero-panel p:not(.eyebrow){max-width:62%}
+.hero-progress{z-index:4;background:radial-gradient(circle at center,#07100c 57%,transparent 59%),conic-gradient(var(--mf-glow) var(--hero-pct),#2b4130 0);box-shadow:0 0 0 4px #060d0bbf,0 0 25px #a8ff2766}
+.card.feature:has(.btn){border-color:#ffa338;box-shadow:inset 0 1px #ffd48b50,0 0 18px #ff901c22}
+.card.feature:has(.btn) .btn{width:100%}
+/* Tight and legible training calendar, avoiding clipping on 320px devices. */
+.week-visual{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.week-day{min-width:0;padding-inline:1px}
+.session-row{min-width:0}
+/* Visual parity for secondary screens: orange framing, neon active indicators. */
+#app[data-screen="program"] .card.feature,#app[data-screen="history"] .card.feature,#app[data-screen="settings"] .card.feature{border-color:#ff9e38aa}
+#app[data-screen="library"] details.card[open]{box-shadow:0 0 18px #ff8d2426,inset 0 1px #ffcc7433}
+.coach-hero{position:relative;isolation:isolate}
+.coach-helmet{position:relative;z-index:1}
+.coach-message{z-index:2}
+.coach-quick button{transition:border-color .16s,background .16s}
+.coach-quick button:active{border-color:#baff1b;background:#1b2d21}
+/* Interactive elements: visible keyboard focus and sufficiently large touch areas. */
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #d3ff60;outline-offset:3px}
+.bottom-nav button{touch-action:manipulation}
+.bottom-nav button.selected{box-shadow:inset 0 1px #baff1b26}
+@media(max-width:370px){.hero-panel h1{max-width:78%;font-size:29px}.hero-panel p:not(.eyebrow){max-width:67%}.week-visual{gap:2px}.week-day{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.coach-quick button{transition:none}}

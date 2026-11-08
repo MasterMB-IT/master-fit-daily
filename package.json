@@ -1,0 +1,14 @@
+{
+  "name": "master-fit-evolve-react",
+  "version": "2.0.0-alpha.1",
+  "private": true,
+  "description": "React offline shell + preserved legacy training engine",
+  "scripts": {
+    "serve": "python -m http.server 8080",
+    "test:legacy": "node legacy/tests/continuity.test.cjs"
+  },
+  "dependencies": {
+    "react": "16.0.0",
+    "react-dom": "16.0.0"
+  }
+}

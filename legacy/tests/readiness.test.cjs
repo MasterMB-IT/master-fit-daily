@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const src=fs.readFileSync(require('path').join(__dirname,'../app.js'),'utf8');
+const ctx={localStorage:{getItem:()=>null},window:{MASTER_FIT_CATALOG:[]},document:{querySelector:()=>({innerHTML:''}),querySelectorAll:()=>[]},navigator:{},location:{protocol:'file:'},alert:()=>{}};
+vm.createContext(ctx);vm.runInContext(src.replace(/render\(\);if\('serviceWorker'[\s\S]*$/,''),ctx);
+const w={sets:2,reps:10};
+let r=ctx.readinessProposal({energy:'low',sleep:'ok',symptoms:'no'},w);
+assert.strictEqual(r.kind,'lighter');assert.strictEqual(r.sets,1);assert.strictEqual(r.reps,10);
+r=ctx.readinessProposal({energy:'normal',sleep:'poor',symptoms:'no'},{sets:1,reps:10});
+assert.strictEqual(r.sets,1);assert.strictEqual(r.reps,8);
+assert.strictEqual(ctx.readinessProposal({energy:'high',sleep:'ok',symptoms:'no'},w).kind,'normal');
+assert.strictEqual(ctx.readinessProposal({energy:'high',sleep:'ok',symptoms:'yes'},w).kind,'stop');
+assert.strictEqual(ctx.readinessProposal(null,w).kind,'stop');
+console.log('PASS: check-in, riduzione temporanea, recupero, stop sintomi');

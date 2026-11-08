@@ -1,0 +1,28 @@
+/* v29: screen-by-screen polish. Existing training data and logic remain authoritative. */
+:root{--neon:#c0ff1d;--ember:#ff9e27;--cyan:#54e6e2}
+body{background:#020606}
+main{position:relative;overflow-x:clip;max-width:430px;padding-inline:14px;background:radial-gradient(ellipse 85% 330px at 65% 0%,#18302565,transparent),#030808}
+main::after{content:"";position:absolute;pointer-events:none;inset:0 0 auto;height:2px;background:linear-gradient(90deg,transparent,#ff9e27,transparent);opacity:.6}
+.topbar{gap:9px}.brand{font-size:21px}.brand small{letter-spacing:1.2px}.avatar{flex:none}
+.hero-panel{min-height:405px;padding:21px 17px 100px;box-shadow:0 0 0 1px #ffb34a28,0 12px 36px #000b}
+.hero-art{width:87%;height:78%;right:-21px;top:-8px;background-position:right top;background-size:contain}
+.hero-panel::after{background:linear-gradient(90deg,#040908ed 0%,#0409085e 43%,transparent 78%),linear-gradient(0deg,#030707 0%,#03070765 18%,transparent 54%)}
+.hero-panel h1{margin-top:133px;font-size:clamp(31px,9vw,40px);line-height:1.04;max-width:100%}
+.hero-panel p:not(.eyebrow){font-size:12px;max-width:210px}
+.stat-strip{left:12px;right:12px;bottom:12px;gap:5px}.stat-strip>div{padding:10px 3px}.stat-strip b{font-size:22px}.stat-strip small{font-size:9px}
+.card.feature{position:relative;overflow:hidden;padding:19px 16px}.card.feature:after{content:"";position:absolute;pointer-events:none;top:0;left:20px;width:78px;height:2px;background:linear-gradient(90deg,#fff4b1,#ff8b12,transparent)}
+.card.feature h2{margin:10px 0;font-size:25px}.card.feature p{font-size:13px}.btn{min-height:51px;margin-top:13px}
+.coach-teaser{position:relative;overflow:hidden;min-height:126px;background:radial-gradient(circle at 5% 10%,#eb8c2640,transparent 50%),linear-gradient(120deg,#10221e,#050d0c)}
+.coach-teaser::after{content:"";position:absolute;right:-18px;bottom:-35px;width:120px;height:130px;background:url('cinematic-coach.png') center top/contain no-repeat;opacity:.22;pointer-events:none}
+.coach-teaser>div{position:relative;z-index:1}
+.coach-hero{min-height:460px;padding:14px 14px 23px}.coach-helmet{height:260px;background-position:center top;background-size:contain}.coach-hero h1{font-size:28px}.coach-hero p{font-size:13px}
+.coach-quick{display:grid;gap:9px;margin:14px 0}.coach-quick button{width:100%;min-height:56px;display:flex;align-items:center;gap:13px;text-align:left;padding:11px 13px;color:#f4fff6;border:1px solid #476157;border-radius:13px;background:linear-gradient(115deg,#10221e,#070f10);cursor:pointer;font:inherit;font-weight:700;box-shadow:inset 0 1px #ffffff12}.coach-quick button:focus-visible{outline:2px solid var(--neon);outline-offset:3px}.coach-quick .quick-icon{display:grid;place-items:center;width:33px;height:33px;flex:none;border-radius:9px;border:1px solid #8b681d;color:var(--neon);font-size:19px}.coach-quick .quick-arrow{margin-left:auto;color:var(--neon);font-size:20px}.coach-quick button:hover{border-color:var(--ember)}
+.week-visual{gap:4px}.week-day{padding:11px 1px}.session-row{padding:13px 0}.session-day{border:1px solid #a66d29;background:#20190f;color:#ffbf54}
+#app[data-screen=program]>.card.feature{border-color:#f4a42e}
+#app[data-screen=history]>.three-stats{gap:6px}#app[data-screen=history]>.three-stats .card{padding:12px 6px}#app[data-screen=history]>.three-stats b{font-size:19px}
+#app[data-screen=library]>details.card{border-left:2px solid #ffab2e}#app[data-screen=library]>details.card[open]{border-color:#ff9c25;box-shadow:0 0 24px #e77b1726}
+#app[data-screen=settings]>.profile-hero{position:relative;overflow:hidden}#app[data-screen=settings]>.profile-hero::before{content:"";position:absolute;inset:0 0 auto;height:130px;background:radial-gradient(ellipse at 80% 0%,#ff9c1b30,transparent 70%);pointer-events:none}
+.exercise-stage{min-height:340px}.stage-art{height:135px}.series-panel{border-color:#a9ed29}.set-dots{gap:5px}.set-dots span{padding:10px 0}
+.bottom-nav{width:min(100%,430px);padding:7px 5px max(11px,env(safe-area-inset-bottom));border-radius:16px 16px 0 0}.bottom-nav button{padding:7px 0}.bottom-nav button span{font-size:21px}.bottom-nav button small{font-size:9px}
+@media(max-width:365px){main{padding-inline:11px}.hero-panel{min-height:385px}.hero-panel h1{margin-top:126px}.stat-strip small{font-size:8px}.coach-quick button{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important}}

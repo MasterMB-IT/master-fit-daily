@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const root=path.join(__dirname,'..'),ctx={window:{},navigator:{},location:{protocol:'file:'},localStorage:{getItem:()=>null},document:{querySelector:()=>({innerHTML:'',addEventListener:()=>{},querySelector:()=>null})}};
+vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(path.join(root,'exercise-catalog.js'),'utf8'),ctx);
+vm.runInContext(fs.readFileSync(path.join(root,'technique-guide.js'),'utf8'),ctx);
+vm.runInContext(fs.readFileSync(path.join(root,'app.js'),'utf8'),ctx);
+const profile={level:'principiante',equipment:[]},current=ctx.window.MASTER_FIT_CATALOG.find(x=>x.pattern==='squat'&&x.equipment==='body'&&x.level===1);
+assert.ok(current);
+const options=vm.runInContext(`alternativeCandidates({catalogId:'${current.id}',key:'squat'},${JSON.stringify(profile)})`,ctx);
+assert.ok(options.length);assert.ok(options.every(x=>x.level<=current.level&&x.equipment==='body'&&x.id!==current.id));
+const excluded=vm.runInContext(`alternativeCandidates({catalogId:'${current.id}',key:'squat',triedAlternatives:['${options[0].id}']},${JSON.stringify(profile)})`,ctx);
+assert.ok(!excluded.some(x=>x.id===options[0].id));
+const reason=vm.runInContext(`alternativeReason(${JSON.stringify(current)},${JSON.stringify(options[0])})`,ctx);
+assert.ok(reason.includes('attrezzatura')&&reason.includes('limitazioni'));
+console.log('PASS: alternative non più difficili, attrezzatura, nessuna ripetizione, motivazione');

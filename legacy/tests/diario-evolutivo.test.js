@@ -1,0 +1,14 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/../app.js','utf8');
+const ctx={localStorage:{getItem:()=>null},alert:()=>{},document:{querySelector:()=>null},Date,console};
+vm.createContext(ctx);vm.runInContext(src.slice(0,src.indexOf('function header()'))+'\nthis.api={coachDiary};',ctx);
+const ex=(reps)=>({catalogId:'squat-1',name:'Squat',actual:[reps,reps],actualLoads:[10,10]});
+const sessions=[{date:'2026-11-02',label:'A',completed:true,feedback:{pain:'no'},exercises:[ex(8)]},{date:'2026-11-04',label:'B',completed:true,feedback:{pain:'no'},exercises:[ex(9)]},{date:'2026-11-06',label:'C',completed:false,feedback:{pain:'yes'},exercises:[ex(12)]}];
+const events=ctx.api.coachDiary(sessions,100);
+assert(events.some(e=>e.kind==='progress'&&e.detail.includes('+2 ripetizioni')));
+assert(events.some(e=>e.kind==='caution'));
+assert(!events.some(e=>e.date==='2026-11-06'&&e.kind==='progress'));
+assert.equal(ctx.api.coachDiary([],100).length,0);
+assert(ctx.api.coachDiary(sessions,2).length<=2);
+assert(events.every(e=>!e.detail.includes('massimale stimato')));
+console.log('PASS: diario, progressi reali, parziali, fastidi, limiti');

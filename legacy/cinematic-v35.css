@@ -1,0 +1,33 @@
+/* EVOLVE v35: visual-reference pass. Layout and data remain driven by app.js. */
+:root{--reference-lime:#baff12;--reference-orange:#ff921e;--reference-surface:#07100e}
+body{background:radial-gradient(ellipse at center top,#17220d 0,#020403 54%);font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+main{max-width:430px;min-height:100dvh;padding:11px 11px calc(104px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#030908,#020504);box-shadow:inset 1px 0 #e98b2840,inset -1px 0 #e98b2840}
+.topbar{min-height:61px;margin-bottom:12px;gap:8px}.brand{font-style:italic;font-size:23px;letter-spacing:-1.25px}.brand span{color:var(--reference-lime)}.brand small{font-style:normal;letter-spacing:1.45px}.logo-mark{color:var(--reference-lime);text-shadow:0 0 12px #baff1266}.avatar{box-shadow:0 0 14px #aaff2250,inset 0 0 12px #baff121c}
+.hero-panel{height:382px;min-height:0;padding:18px 13px 84px;overflow:hidden;background:radial-gradient(ellipse at 72% 30%,#df7d1722,transparent 60%),#030807;border:1px solid #f39b2d;border-radius:19px;box-shadow:0 0 20px #ff891a1e,inset 0 0 0 1px #ffd18316}
+.hero-panel .eyebrow{font-size:9px;position:relative;z-index:4;color:#ffbd55}
+.hero-art{top:0;right:-4px;width:100%;height:75%;background-position:right top;background-size:contain;opacity:1;filter:drop-shadow(0 0 20px #ff8b1a38)}
+.hero-panel::after{inset:0;right:0;top:0;width:auto;height:auto;opacity:1;background:linear-gradient(0deg,#030807 2%,transparent 38%),linear-gradient(90deg,#0308078a 0%,transparent 75%);border:0;box-shadow:none;border-radius:0}
+.hero-panel h1{margin:160px 0 4px;max-width:77%;font-size:clamp(29px,8vw,36px);line-height:1.02;text-shadow:0 2px 14px #000}
+.hero-panel p:not(.eyebrow){font-size:11px;line-height:1.42;max-width:68%;margin:7px 0;color:#f0f4ee}
+.hero-progress{right:12px;bottom:84px;width:79px;height:79px;border:1px solid #ffab2b;box-shadow:0 0 0 3px #060d0d,0 0 18px #baff1244}
+.hero-progress strong{font-size:24px}.hero-progress small{font-size:9px}
+.stat-strip{bottom:8px;left:8px;right:8px;gap:5px}.stat-strip>div{padding:8px 3px;min-height:58px;background:linear-gradient(150deg,#0c1815,#050a09);border-color:#8a633b99;border-radius:10px}.stat-strip b{font-size:20px}.stat-strip small{font-size:9px;line-height:1.2}
+.card.feature{margin-top:10px;padding:15px 14px;border-radius:16px}.card.feature h2{font-size:23px;margin:7px 0}.card.feature p{font-size:12px;line-height:1.35;margin:6px 0 12px}.card.feature .btn{min-height:46px}
+.btn{border-radius:999px;font-size:14px;font-weight:850;min-height:48px;box-shadow:0 0 17px #baff1250,inset 0 1px #fff9}
+.card,.cinematic-summary{border-radius:14px}.card{padding:15px;margin:11px 0}.card h2{line-height:1.17}.card h3{line-height:1.23}
+.bottom-nav{width:min(100%,430px);padding:7px 5px max(9px,env(safe-area-inset-bottom));border-radius:16px 16px 0 0;border-color:#ad6a326b;background:#050b0aee;box-shadow:0 -5px 25px #000e,0 -2px 15px #ff922019}.bottom-nav button{min-height:51px}.bottom-nav button.selected{background:#aaff1014}.bottom-nav button small{font-size:9px}.bottom-nav .nav-icon svg{width:21px;height:21px}
+/* Coach: character is the visual hero; functional quick actions stay immediately below. */
+.coach-hero{min-height:0;padding:14px 13px 18px;border-radius:18px;border-color:#f19a297e;background:radial-gradient(ellipse at 55% 38%,#19a34d3e,transparent 60%),#030a09}
+.coach-status{font-size:13px}.coach-helmet{height:255px;max-width:305px;margin:0 auto -5px;background-size:contain;background-position:center top;filter:drop-shadow(0 0 23px #37ff6b6a)}
+.coach-message{padding:11px 13px;border-radius:12px}.coach-hero h1{font-size:24px}.coach-hero p{font-size:12px}.coach-quick{gap:7px}.coach-quick button{min-height:50px;border-radius:10px}
+/* Weekly schedule and exercise log echo the reference's tight illuminated rows. */
+.week-visual{gap:4px}.week-day{border-radius:8px;padding:7px 1px;min-width:0}.week-day.planned{border-color:#f9a52b}.week-day.complete{border-color:#aaff1d}.session-row{border-radius:11px;padding:12px 10px}.session-row:has(.pill){border-color:#9b783e80}
+.exercise-stage{border-radius:17px;padding:15px 12px;min-height:0}.exercise-stage h1{font-size:28px}.stage-art{height:170px;background:radial-gradient(ellipse at center,#0d8c8955,transparent 65%)}.series-panel{border-radius:13px}.set-dots span{padding:10px 0;border-radius:9px}.set-dots span.current{background:#aaff1515}
+/* Library, profile, and progress: consistent luminous UI hierarchy. */
+#app[data-screen="history"] .card,#app[data-screen="settings"] .card,#app[data-screen="library"] .card{background:linear-gradient(145deg,#111b18,#050b0a);border-color:#816d4770}
+#app[data-screen="history"] .card h2,#app[data-screen="library"] .card h2,#app[data-screen="settings"] .card h2{letter-spacing:-.45px}
+#app[data-screen="library"] details.card[open]{border-color:#ffab37;box-shadow:0 0 16px #ff9b1d25}
+button:focus-visible,summary:focus-visible{outline:2px solid #d8ff62;outline-offset:2px}
+@media(max-width:370px){main{padding-inline:8px}.brand{font-size:20px}.hero-panel{height:362px}.hero-panel h1{margin-top:149px;font-size:29px}.hero-progress{width:69px;height:69px;bottom:83px}.stat-strip small{font-size:8px}.coach-helmet{height:220px}}
+@media(min-width:430px){.hero-panel{height:400px}.hero-panel h1{margin-top:176px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

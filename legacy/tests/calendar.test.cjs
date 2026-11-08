@@ -1,0 +1,12 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const src=fs.readFileSync(require('path').join(__dirname,'../app.js'),'utf8');
+const ctx={localStorage:{getItem:()=>null},window:{MASTER_FIT_CATALOG:[]},document:{querySelector:()=>({innerHTML:''}),querySelectorAll:()=>[]},navigator:{},location:{protocol:'file:'},alert:()=>{}};
+vm.createContext(ctx);vm.runInContext(src.replace(/render\(\);if\('serviceWorker'[\s\S]*$/,''),ctx);
+const profile={days:3,duration:30,trainingDays:[0,2,4],equipment:[],level:'ripresa'};
+const week=ctx.weekPlan(profile,'2026-11-02',null);
+assert.deepStrictEqual(Array.from(week.sessions,x=>x.date),['2026-11-02','2026-11-04','2026-11-06']);
+assert(ctx.movePlannedSession(week,week.sessions[0].id,'2026-11-03'));
+assert(!ctx.movePlannedSession(week,week.sessions[0].id,'2026-11-04'));
+assert(!ctx.movePlannedSession(week,week.sessions[0].id,'2026-11-10'));
+assert.deepStrictEqual(Array.from(ctx.preferredOffsets({days:2})),[1,3]);
+console.log('PASS: giorni preferiti, spostamento, conflitti, limiti settimana, retrocompatibilità');
