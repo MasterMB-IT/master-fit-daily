@@ -217,11 +217,27 @@ function ProgressionPanel(props){
  h('button',{className:'secondary-action',onClick:function(){var fresh=read();fresh.exerciseProgressionDecisions=fresh.exerciseProgressionDecisions||{};fresh.exerciseProgressionDecisions[x.exerciseId]={id:x.id,choice:'declined',date:new Date().toISOString()};persistNative(fresh,props.refresh)}},'Non applicare')):null)}),
  h('p',{className:'native-muted'},'Questi suggerimenti sono indicativi e non sostituiscono un professionista. In caso di sintomi interrompi l’attività.'));
 }
-function CoachNative(props){
- var d=props.data;
- var messages=JSON.parse(sessionStorage.getItem('masterfit-ai-chat')||'[]');
- var config=JSON.parse(localStorage.getItem('masterfit-ai-config')||'{}');
- function CoachChat(){React.Component.apply(this,arguments);this.state={messages:messages,text:'',endpoint:config.endpoint||'',token:config.token||'',busy:false,error:'',consent:false};this.send=this.send.bind(this)}
+function CoachChat(){
+ React.Component.apply(this,arguments);
+ var messages=[],config={};
+ try{
+  messages=JSON.parse(sessionStorage.getItem('masterfit-ai-chat')||'[]');
+  if(!Array.isArray(messages))messages=[];
+ }catch(e){}
+ try{
+  config=JSON.parse(localStorage.getItem('masterfit-ai-config')||'{}')||{};
+ }catch(e){}
+ this.state={
+  messages:messages,
+  text:'',
+  endpoint:config.endpoint||'',
+  token:config.token||'',
+  busy:false,
+  error:'',
+  consent:false
+ };
+ this.send=this.send.bind(this);
+}
  CoachChat.prototype=Object.create(React.Component.prototype);CoachChat.prototype.constructor=CoachChat;
  CoachChat.prototype.saveConfig=function(){var endpoint=this.state.endpoint.trim();if(endpoint&&!/^https:\/\//i.test(endpoint)){this.setState({error:'Il server IA deve usare HTTPS.'});return}localStorage.setItem('masterfit-ai-config',JSON.stringify({endpoint:endpoint,token:this.state.token}));this.setState({error:'Configurazione salvata sul dispositivo.'})};
  CoachChat.prototype.send=async function(ev){if(ev)ev.preventDefault();var text=this.state.text.trim();if(!text||this.state.busy)return;var endpoint=this.state.endpoint.trim();if(!/^https:\/\//i.test(endpoint)){this.setState({error:'Configura prima l’indirizzo HTTPS del tuo Worker IA.'});return}if(!this.state.consent){this.setState({error:'Conferma prima l’invio dei dati al servizio IA.'});return}
@@ -246,8 +262,7 @@ function CoachNative(props){
  return h('main',{className:'native-page'},h(Heading,{kicker:'MASTER COACH · IA REALE',title:'Parla con il tuo trainer'}),configPanel,chatPanel);
 };
 
- return h(CoachChat);
-}
+function CoachNative(props){return h(CoachChat);}
 function SettingsNative(props){var d=props.data,p=d.profile||{};return h('main',{className:'native-page'},h(Heading,{kicker:'IL TUO PERCORSO',title:'Profilo atleta'}),h(Panel,null,h('h2',null,p.name||'Atleta'),h('p',null,'Età '+p.age+' · '+p.height+' cm · '+p.weight+' kg'),h('form',{className:'setup-native',onSubmit:function(ev){ev.preventDefault();var f=ev.currentTarget,weight=Number(f.elements.namedItem("weight").value),duration=Number(f.elements.namedItem("duration").value);if(weight<25||weight>350)return alert('Peso non valido.');p.name=f.elements.namedItem("username").value.trim().slice(0,32)||'Atleta';p.weight=weight;p.duration=duration;persistNative(d,props.refresh);alert('Profilo aggiornato. Il programma già approvato non viene modificato.') }},h('label',{className:'setup-field'},'Nome',h('input',{name:'username',defaultValue:p.name,maxLength:32})),h('label',{className:'setup-field'},'Peso (kg)',h('input',{name:'weight',type:'number',min:25,max:350,defaultValue:p.weight})),h('label',{className:'setup-field'},'Durata preferita',h('select',{name:'duration',defaultValue:String(p.duration||60)},[30,45,60].map(function(n){return h('option',{key:n,value:n},n+' minuti')}))),h('button',{className:'primary',type:'submit'},'Salva modifiche'))),h(Panel,null,h('h2',null,'Attrezzatura e progressione'),h('p',{className:'native-muted'},'Il limite è per ciascun manubrio. Le proposte del Coach non devono superare il materiale disponibile.'),h('form',{className:'setup-native',onSubmit:function(ev){ev.preventDefault();var fresh=read(),v=Number(ev.currentTarget.elements.namedItem('maxkg').value);if(!Number.isFinite(v)||v<0.5||v>100){alert('Indica un peso tra 0,5 e 100 kg.');return}fresh.profile=fresh.profile||{};fresh.profile.equipment=fresh.profile.equipment||[];if(fresh.profile.equipment.indexOf('dumbbells')<0)fresh.profile.equipment.push('dumbbells');fresh.profile.dumbbellMaxKg=v;persistNative(fresh,props.refresh)}},h('label',{className:'setup-field'},'Massimo per manubrio (kg)',h('input',{name:'maxkg',type:'number',min:0.5,max:100,step:0.5,required:true,defaultValue:p.dumbbellMaxKg||6})),h('button',{className:'primary',type:'submit'},'Aggiorna attrezzatura'))),h(Panel,null,h('h2',null,'Backup'),h('button',{className:'secondary-action',onClick:downloadBackup},'Esporta dati JSON'),h('label',{className:'setup-field'},'Ripristina backup JSON',h('input',{type:'file',accept:'.json,application/json',onChange:function(ev){var file=ev.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(){try{var parsed=JSON.parse(reader.result);if(!parsed||!parsed.profile||!parsed.week||!Array.isArray(parsed.sessions))throw Error('Formato non valido');if(confirm('Sostituire i dati correnti con quelli del backup?'))persistNative(parsed,props.refresh)}catch(e){alert('Backup non valido: '+e.message)}};reader.readAsText(file)}}))),h(Panel,{className:'new-user-panel'},h('h2',null,'Nuovo utente · Riparti da zero'),h('p',null,'Esporta prima un backup se vuoi conservare il percorso.'),h('button',{className:'danger-action',onClick:newUser},'Ricomincia da zero')));}
 
 function App(){React.Component.apply(this,arguments);this.state={page:'home',data:read()};this.go=this.go.bind(this);this.refresh=this.refresh.bind(this)}
