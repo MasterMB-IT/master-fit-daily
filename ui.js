@@ -34,7 +34,7 @@ function Panel(props){return h('section',{className:'native-panel '+(props.class
 function Heading(props){return h('div',{className:'native-heading'},h('p',{className:'eyebrow'},props.kicker),h('h1',null,props.title))}
 function openEngine(view){try{var d=read();if(view)d.view=view;localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}window.location.href='legacy/index.html'}
 function Program(props){var d=props.data,w=d.week||{},ss=w.sessions||[];return h('main',{className:'native-page'},h(Heading,{kicker:'LA TUA STRATEGIA',title:'Programma settimanale'}),h(Panel,{className:'feature-panel'},h('p',{className:'eyebrow'},'CICLO DI ALLENAMENTO · SETTIMANA '+safe(w.cycleWeek||1)+'/4'),h('div',{className:'native-flex'},h('div',null,h('h2',null,safe(w.goalLabel||'Il tuo programma')),h('p',null,w.approved?'Piano approvato':'In attesa di approvazione')),h(Circle,{pct:ss.length?Math.round(ss.filter(function(x){return x.completed}).length*100/ss.length):0})),h('p',{className:'native-muted'},safe(w.reason||'Il Coach prepara il piano sulla base del tuo profilo.'))),h('div',{className:'days-grid'},['L','M','M','G','V','S','D'].map(function(day,i){var start=w.start?new Date(w.start+'T12:00:00'):null,date=start?new Date(start.getTime()+i*86400000).toISOString().slice(0,10):'',item=ss.find(function(x){return x.date===date});return h('div',{key:i,className:'day-cell '+(item?'planned ':'')+(item&&item.completed?'done':'')},h('small',null,day),h('strong',null,start?String(Number(date.slice(-2))):'–'),h('span',null,item?(item.completed?'✓':'●'):'·'))})),h(Panel,null,h('h2',null,'Le tue sessioni'),ss.map(function(x,i){return h('div',{key:x.id||i,className:'native-row'},h('span',{className:'native-number'},String.fromCharCode(65+i)),h('div',{className:'native-row-copy'},h('b',null,safe(x.label)),h('small',null,safe(x.date))),h('span',{className:'native-status'},x.completed?'✓ Fatto':'Da fare'))}),ss.length===0?h('p',{className:'native-muted'},'Nessuna sessione disponibile.'):null),h('button',{className:'primary',onClick:function(){openEngine('program')}},w.approved?'Apri programma e allenati →':'Esamina e approva il programma →'),h('p',{className:'native-muted'},'Le modifiche al programma e l’avvio guidato restano disponibili nel motore completo.'))}
-function History(props){var all=props.data.sessions||[],done=all.filter(function(x){return x.completed}).length,recent=all.slice(-7);return h('main',{className:'native-page'},h(Heading,{kicker:'LA TUA EVOLUZIONE',title:'I tuoi progressi'}),h('div',{className:'native-metrics'},[['↗',all.length,'Registrate'],['✓',done,'Complete'],['◎',all.length-done,'Parziali']].map(function(x){return h('div',{key:x[2]},h('span',null,x[0]),h('strong',null,x[1]),h('small',null,x[2]))})),h(Panel,null,h('p',{className:'eyebrow'},'ANDAMENTO REALE'),h('h2',null,'Ultime sessioni'),h('div',{className:'native-chart'},recent.map(function(x,i){return h('div',{className:'chart-col',key:i},h('span',{className:x.completed?'complete':'partial',style:{height:x.completed?'84%':'43%'}},''),h('small',null,safe(x.date||'').slice(5)))})),h('p',{className:'native-muted'},'Le barre distinguono sessioni complete e parziali, non stimano forza o recupero.')),h(Panel,null,h('h2',null,'Diario allenamenti'),all.slice(-6).reverse().map(function(x,i){return h('div',{className:'native-row',key:i},h('span',{className:'native-number'},x.completed?'✓':'·'),h('div',{className:'native-row-copy'},h('b',null,safe(x.label)),h('small',null,safe(x.date))),h('span',{className:'native-status'},x.completed?'Completa':'Parziale'))}),all.length===0?h('p',{className:'native-muted'},'Qui compariranno gli allenamenti registrati.'):null),h('button',{className:'secondary-action',onClick:downloadBackup},'Esporta backup JSON →'))}
+function History(props){var all=props.data.sessions||[],done=all.filter(function(x){return x.completed}).length,recent=all.slice(-7);return h('main',{className:'native-page'},h(Heading,{kicker:'LA TUA EVOLUZIONE',title:'I tuoi progressi'}),h('div',{className:'native-metrics'},[['↗',all.length,'Registrate'],['✓',done,'Complete'],['◎',all.length-done,'Parziali']].map(function(x){return h('div',{key:x[2]},h('span',null,x[0]),h('strong',null,x[1]),h('small',null,x[2]))})),h(Panel,null,h('p',{className:'eyebrow'},'ANDAMENTO REALE'),h('h2',null,'Ultime sessioni'),h('div',{className:'native-chart'},recent.map(function(x,i){return h('div',{className:'chart-col',key:i},h('span',{className:x.completed?'complete':'partial',style:{height:x.completed?'84%':'43%'}},''),h('small',null,safe(x.date||'').slice(5)))})),h('p',{className:'native-muted'},'Le barre distinguono sessioni complete e parziali, non stimano forza o recupero.')),h(Panel,null,h('h2',null,'Diario allenamenti'),all.slice(-6).reverse().map(function(x,i){return h('div',{className:'native-row',key:i},h('span',{className:'native-number'},x.completed?'✓':'·'),h('div',{className:'native-row-copy'},h('b',null,safe(x.label)),h('small',null,safe(x.date))),h('span',{className:'native-status'},x.completed?'Completa':'Parziale'))}),all.length===0?h('p',{className:'native-muted'},'Qui compariranno gli allenamenti registrati.'):null),h('button',{className:'primary',onClick:function(){props.go('past-workout')}},'+ Registra allenamento passato'),h('button',{className:'secondary-action',onClick:downloadBackup},'Esporta backup JSON →'))}
 function Library(props){var cats=[['Gambe','squat','◈'],['Anca e glutei','hinge','◇'],['Spinta orizzontale','push','⊞'],['Tirata orizzontale','pull','⇄'],['Stabilità e core','core','◎']];return h('main',{className:'native-page'},h(Heading,{kicker:'IL TUO LABORATORIO',title:'Esercizi'}),h(Panel,{className:'library-intro'},h('p',{className:'eyebrow'},'GUIDE TECNICHE'),h('h2',null,'Allenati con consapevolezza'),h('p',null,'Esplora le famiglie di movimento e consulta le varianti compatibili con il tuo profilo.')),h('div',{className:'category-list'},cats.map(function(x){return h('button',{key:x[1],className:'category-card',onClick:function(){openEngine('library')}},h('span',{className:'category-icon'},x[2]),h('span',null,h('b',null,x[0]),h('small',null,'Tecnica · errori · alternative')),h('strong',null,'›'))})),h('button',{className:'primary',onClick:function(){openEngine('library')}},'Apri biblioteca completa →'))}
 function Settings(props){
  var p=props.data.profile||{},all=props.data.sessions||[],done=all.filter(function(x){return x.completed}).length;
@@ -163,6 +163,168 @@ TrainerNative.prototype.render=function(){
  return h('main',{className:'native-page'},heading,panel);
 };
 function ProgramNative(props){var d=props.data,w=d.week||{},ss=w.sessions||[];return h('main',{className:'native-page'},h(Heading,{kicker:'LA TUA STRATEGIA',title:'Programma settimanale'}),h(Panel,null,h('p',{className:'eyebrow'},'SETTIMANA '+(w.cycleWeek||1)+'/4'),h('h2',null,w.goalLabel||'Il tuo programma'),h('p',null,w.reason||'Percorso graduale.'),h('p',{className:'native-muted'},w.approved?'Piano approvato':'Il piano è una proposta: decidi tu se approvarlo.'),h('p',{className:'native-muted'},'Ripresa della forza: esercizi multiarticolari veri, volume iniziale moderato e carichi scelti da te. Le varianti facilitanti restano disponibili se necessarie.'),!w.approved?h('button',{className:'primary',onClick:function(){d.week.approved=true;persistNative(d,props.refresh)}},'Approvo il programma'):null),h(ProgressionPanel,{data:d,refresh:props.refresh}),h(Panel,null,h('h2',null,'Sessioni'),ss.map(function(s,i){return h('div',{key:s.id||i,className:'native-row'},h('span',{className:'native-number'},String.fromCharCode(65+i)),h('div',{className:'native-row-copy'},h('b',null,s.label),h('small',null,s.date+' · '+(s.completed?'Registrata':'Da svolgere')),h('small',null,buildNative(d,s).map(function(e){return e.name}).join(' · '))),!s.completed?h('button',{className:'secondary-action',disabled:!w.approved||!!d.active,onClick:function(){if(!w.approved)return;d.active={id:s.id,date:s.date,label:s.label,sets:w.sets||2,exercises:buildNative(d,s)};persistNative(d,props.refresh);props.go('trainer')}},'Inizia'):h('span',null,'✓'))}),ss.length===0?h('p',null,'Nessuna sessione pianificata.'):null),d.active?h('button',{className:'primary',onClick:function(){props.go('trainer')}},'Riprendi allenamento in corso →'):null,h(Panel,null,h('h2',null,'Modifica la data di una sessione'),h('p',{className:'native-muted'},'Puoi spostare una sessione senza modificare gli esercizi.'),h('form',{onSubmit:function(ev){ev.preventDefault();var id=ev.currentTarget.elements.session.value,date=ev.currentTarget.elements.day.value;if(!date)return;var target=ss.find(function(s){return s.id===id});if(!target||target.completed||ss.some(function(s){return s.id!==id&&s.date===date})){alert('Data non disponibile o sessione già completata.');return}target.date=date;persistNative(d,props.refresh)}},h('select',{name:'session'},ss.filter(function(s){return !s.completed}).map(function(s){return h('option',{key:s.id,value:s.id},s.label+' · '+s.date)})),h('input',{name:'day',type:'date',required:true}),h('button',{className:'secondary-action',type:'submit'},'Sposta sessione'))));}
+function PastWorkout(props){
+ React.Component.call(this,props);
+ this.state={
+  date:'2026-11-09',
+  label:'Allenamento di ripresa',
+  effort:'7',
+  notes:'',
+  items:[
+   {name:'Goblet squat',sets:'3',reps:'10',load:'6'},
+   {name:'Piegamenti a terra',sets:'3',reps:'10',load:''},
+   {name:'Rematore con manubrio',sets:'3',reps:'12',load:'6'},
+   {name:'Curl con manubrio per braccio',sets:'3',reps:'12',load:'6'}
+  ]
+ };
+}
+PastWorkout.prototype=Object.create(React.Component.prototype);
+PastWorkout.prototype.constructor=PastWorkout;
+PastWorkout.prototype.render=function(){
+ var self=this,st=this.state;
+ function update(i,k,v){
+  var items=st.items.map(function(x,j){
+   if(i!==j)return x;
+   var copy=Object.assign({},x);
+   copy[k]=v;
+   return copy;
+  });
+  self.setState({items:items});
+ }
+ function field(label,type,value,change,extra){
+  return h('label',{className:'setup-field'},
+   label,
+   h('input',Object.assign({
+    type:type,
+    value:value,
+    onChange:function(e){change(e.target.value)}
+   },extra||{}))
+  );
+ }
+ function save(){
+  var d=read();
+  var effort=Number(st.effort);
+  var today=new Date().toLocaleDateString('en-CA');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(st.date)||
+     st.date>today){
+   alert('Controlla la data.');
+   return;
+  }
+  if(!st.label.trim()||!st.items.length||
+     !Number.isInteger(effort)||effort<1||effort>10){
+   alert('Controlla titolo, esercizi e fatica.');
+   return;
+  }
+  var exercises=[];
+  for(var i=0;i<st.items.length;i++){
+   var x=st.items[i];
+   var sets=Number(x.sets),reps=Number(x.reps);
+   var load=x.load.trim()===''?null:Number(x.load);
+   if(!x.name.trim()||
+      !Number.isInteger(sets)||sets<1||sets>30||
+      !Number.isInteger(reps)||reps<0||reps>100||
+      (load!==null&&(!Number.isFinite(load)||load<0||load>500))){
+    alert('Controlla esercizio '+(i+1));
+    return;
+   }
+   exercises.push({
+    name:x.name.trim(),
+    done:sets,
+    actual:Array(sets).fill(reps),
+    actualLoads:Array(sets).fill(load),
+    target:{reps:reps,loadKg:load},
+    skipped:false,
+    manual:true
+   });
+  }
+  if(!confirm('Salvare nel diario senza modificare il programma?'))return;
+  d.sessions=d.sessions||[];
+  d.sessions.push({
+   id:'manual-'+Date.now(),
+   date:st.date,
+   label:st.label.trim(),
+   completed:true,
+   source:'manual',
+   exercises:exercises,
+   feedback:{
+    effortScore:effort,
+    effort:effort>=8?'hard':effort<=3?'easy':'normal',
+    pain:'unknown',
+    comment:st.notes.slice(0,500)
+   }
+  });
+  try{
+   persistNative(d,self.props.refresh);
+   self.props.go('history');
+  }catch(e){
+   alert('Errore nel salvataggio: '+e.message);
+  }
+ }
+ return h('main',{className:'native-page'},
+  h(Heading,{
+   kicker:'DIARIO ALLENAMENTI',
+   title:'Registra allenamento passato'
+  }),
+  h(Panel,null,
+   h('p',{className:'native-muted'},
+    'Dati precompilati: controllali prima di salvare. Il programma non cambia.'),
+   field('Data','date',st.date,function(v){
+    self.setState({date:v});
+   }),
+   field('Titolo','text',st.label,function(v){
+    self.setState({label:v});
+   }),
+   st.items.map(function(x,i){
+    return h('div',{key:i,className:'exercise-proposal'},
+     field('Esercizio '+(i+1),'text',x.name,function(v){
+      update(i,'name',v);
+     }),
+     field('Serie','number',x.sets,function(v){
+      update(i,'sets',v);
+     },{min:1,max:30}),
+     field('Ripetizioni per serie','number',x.reps,function(v){
+      update(i,'reps',v);
+     },{min:0,max:100}),
+     field('Carico totale in kg','number',x.load,function(v){
+      update(i,'load',v);
+     },{min:0,max:500,step:0.5}),
+     h('button',{
+      className:'secondary-action',
+      onClick:function(){
+       self.setState({items:st.items.filter(function(_,j){
+        return j!==i;
+       })});
+      }
+     },'Rimuovi esercizio')
+    );
+   }),
+   h('button',{
+    className:'secondary-action',
+    onClick:function(){
+     self.setState({items:st.items.concat([{
+      name:'',sets:'3',reps:'10',load:''
+     }])});
+    }
+   },'+ Aggiungi esercizio'),
+   field('Fatica percepita (1-10)','number',st.effort,function(v){
+    self.setState({effort:v});
+   },{min:1,max:10}),
+   h('label',{className:'setup-field'},
+    'Note',
+    h('textarea',{
+     value:st.notes,
+     rows:3,
+     maxLength:500,
+     onChange:function(e){
+      self.setState({notes:e.target.value});
+     }
+    })
+   ),
+   h('button',{className:'primary',onClick:save},
+    'Salva nel diario')
+  )
+ );
+};
 function LibraryNative(props){
  var all=availableNative(props.data.profile||{}), patterns={squat:'Gambe',hinge:'Anca e glutei',push:'Spinta',pull:'Tirata',core:'Core'};
  var query=(props.search||'').trim().toLocaleLowerCase('it'),category=props.category||'all';
@@ -271,6 +433,6 @@ App.prototype.componentDidMount=function(){window.addEventListener('focus',this.
 App.prototype.componentWillUnmount=function(){window.removeEventListener('focus',this.refresh);document.removeEventListener('visibilitychange',this.refresh)};
 App.prototype.refresh=function(){this.setState({data:read()})};
 App.prototype.go=function(page){if(page==='legacy-coach'){page='coach'}this.setState({page:page,data:read()});window.scrollTo(0,0)};
-App.prototype.render=function(){var page=this.state.page,data=this.state.data,content=!data.profile?h(Welcome,{onCreated:this.refresh}):page==='home'?h(Home,{data:data,go:this.go}):page==='coach'?h(CoachNative,{data:data,refresh:this.refresh}):page==='trainer'?h(TrainerNative,{data:data,refresh:this.refresh,go:this.go}):page==='program'?h(ProgramNative,{data:data,refresh:this.refresh,go:this.go}):page==='history'?h(History,{data:data}):page==='library'?h(LibraryScreen,{data:data}):h(SettingsNative,{data:data,refresh:this.refresh});return h('div',{className:'shell'},h(Top,{go:this.go}),content,h(Nav,{page:page,go:this.go}))};
+App.prototype.render=function(){var page=this.state.page,data=this.state.data,content=!data.profile?h(Welcome,{onCreated:this.refresh}):page==='home'?h(Home,{data:data,go:this.go}):page==='coach'?h(CoachNative,{data:data,refresh:this.refresh}):page==='past-workout'?h(PastWorkout,{data:data,refresh:this.refresh,go:this.go}):page==='trainer'?h(TrainerNative,{data:data,refresh:this.refresh,go:this.go}):page==='program'?h(ProgramNative,{data:data,refresh:this.refresh,go:this.go}):page==='history'?h(History,{data:data}):page==='library'?h(LibraryScreen,{data:data}):h(SettingsNative,{data:data,refresh:this.refresh});return h('div',{className:'shell'},h(Top,{go:this.go}),content,h(Nav,{page:page,go:this.go}))};
 ReactDOM.render(h(App),document.getElementById('root'));
 })();
